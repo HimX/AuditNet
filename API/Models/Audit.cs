@@ -16,5 +16,5 @@ public class Audit
     public int State { get; set; }
 
     public List<Schedule>? Schedules { get; set; } = new List<Schedule>();
-    [JsonIgnore] public CommentPage? CommentPage { get; set; }
+    public CommentPage? CommentPage { get; set; }
 }

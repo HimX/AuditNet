@@ -13,21 +13,21 @@ public class AuditService
         _context = context;
     }
 
-    public async Task<IEnumerable<AuditPlan>> GetPlans()
+    public async Task<IEnumerable<AuditPlan>> GetPlansAsync()
     {
         return await _context.AuditPlans
             .AsNoTracking()
             .ToListAsync();
     }
 
-    public async Task<AuditPlan?> GetPlanById(Guid id)
+    public async Task<AuditPlan?> GetPlanByIdAsync(Guid id)
     {
         return await _context.AuditPlans
             .AsNoTracking()
             .SingleOrDefaultAsync(p => p.Id == id);
     }
 
-    public async Task<AuditPlan?> CreatePlan(AuditPlan newPlan)
+    public async Task<AuditPlan?> CreatePlanAsync(AuditPlan newPlan)
     {
         _context.AuditPlans.Add(newPlan);
         await _context.SaveChangesAsync();
@@ -35,7 +35,7 @@ public class AuditService
         return newPlan;
     }
 
-    public async Task DeletePlanById(Guid id)
+    public async Task DeletePlanByIdAsync(Guid id)
     {
         var planToDelete = await _context.AuditPlans.FindAsync(id);
 
@@ -46,7 +46,7 @@ public class AuditService
         await _context.SaveChangesAsync();
     }
 
-    public async Task<AuditPlan> GetAuditsByPlanId(Guid id)
+    public async Task<AuditPlan> GetAuditsByPlanIdAsync(Guid id)
     {
         var plan = await _context.AuditPlans
             .Include(p => p.Audits)
@@ -60,7 +60,7 @@ public class AuditService
         return plan;
     }
 
-    public async Task<Audit?> AddAuditToPlan(Guid planId, Audit newAudit)
+    public async Task<Audit?> AddAuditToPlanAsync(Guid planId, Audit newAudit)
     {
         var plan = await _context.AuditPlans.FindAsync(planId);
 
@@ -74,21 +74,21 @@ public class AuditService
         return newAudit;
     }
 
-    public async Task<IEnumerable<Audit>> GetAudits()
+    public async Task<IEnumerable<Audit>> GetAuditsAsync()
     {
         return await _context.Audits
             .AsNoTracking()
             .ToListAsync();
     }
 
-    public async Task<Audit?> GetAuditById(Guid id)
+    public async Task<Audit?> GetAuditByIdAsync(Guid id)
     {
         return await _context.Audits
             .AsNoTracking()
             .SingleOrDefaultAsync(p => p.Id == id);
     }
 
-    public async Task<Audit?> CreateAudit(Audit newAudit)
+    public async Task<Audit?> CreateAuditAsync(Audit newAudit)
     {
         _context.Audits.Add(newAudit);
         await _context.SaveChangesAsync();
@@ -96,7 +96,7 @@ public class AuditService
         return newAudit;
     }
 
-    public async Task<Comment?> AddCommentToAudit(Guid auditId, Comment comment)
+    public async Task<Comment?> AddCommentToAuditAsync(Guid auditId, Comment comment)
     {
         var audit = await _context.Audits
             .Include(p => p.CommentPage)
@@ -115,7 +115,7 @@ public class AuditService
         return comment;
     }
 
-    public async Task<Audit?> GetAuditWithComments(Guid id)
+    public async Task<Audit?> GetAuditWithCommentsAsync(Guid id)
     {
         var audit = await _context.Audits
             .Include(p => p.CommentPage)
@@ -125,7 +125,7 @@ public class AuditService
         return audit;
     }
 
-    public async Task<Schedule?> AddScheduleToAudit(Guid id, Schedule schedule)
+    public async Task<Schedule?> AddScheduleToAuditAsync(Guid id, Schedule schedule)
     {
         var audit = await _context.Audits.FindAsync(id);
 
@@ -139,7 +139,7 @@ public class AuditService
         return schedule;
     }
 
-    public async Task<Audit?> GetAuditWithSchedules(Guid id)
+    public async Task<Audit?> GetAuditWithSchedulesAsync(Guid id)
     {
         var audit = await _context.Audits
             .Include(p => p.Schedules)
