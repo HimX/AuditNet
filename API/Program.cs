@@ -47,6 +47,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.AddSqlite<DataContext>(builder.Configuration.GetConnectionString("Default"));
 builder.Services.AddScoped<AuditService>();
+builder.Services.AddScoped<PersonService>();
 
 var app = builder.Build();
 
