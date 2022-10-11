@@ -13,4 +13,8 @@ public class AuditPlanRepository : RepositoryBase<AuditPlan>, IAuditPlanReposito
         FindAll(trackChanges)
             .OrderBy(c => c.Title)
             .ToList();
+
+    public AuditPlan? GetAuditPlan(Guid auditPlanId, bool trackChanges) =>
+        FindByCondition(ap => ap.Id.Equals(auditPlanId), trackChanges)
+            .SingleOrDefault();
 }

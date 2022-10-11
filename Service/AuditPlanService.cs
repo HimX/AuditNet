@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Contracts;
+using Entities.Exceptions;
 using Entities.Models;
 using Service.Contracts;
 using Shared.DataTransferObjects;
@@ -19,16 +20,19 @@ internal sealed class AuditPlanService : IAuditPlanService
 
     public IEnumerable<AuditPlanDto> GetAllAuditPlans(bool trackChanges)
     {
-        try
-        {
-            var auditPlans = _repository.AuditPlan.GetAllAuditPlans(trackChanges);
-            var auditPlansDto = _mapper.Map<IEnumerable<AuditPlanDto>>(auditPlans);
-            return auditPlansDto;
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+        var auditPlans = _repository.AuditPlan.GetAllAuditPlans(trackChanges);
+        var auditPlansDto = _mapper.Map<IEnumerable<AuditPlanDto>>(auditPlans);
+        return auditPlansDto;
+    }
+
+    public AuditPlanDto GetAuditPlan(Guid auditPlanId, bool trackChanges)
+    {
+        var auditPlan = _repository.AuditPlan.GetAuditPlan(auditPlanId, trackChanges);
+
+        if (auditPlan is null)
+            throw new AuditPlanNotFoundException(auditPlanId);
+
+        var auditPlanDto = _mapper.Map<AuditPlanDto>(auditPlan);
+        return auditPlanDto;
     }
 }

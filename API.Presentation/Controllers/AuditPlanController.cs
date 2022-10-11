@@ -3,7 +3,7 @@ using Service.Contracts;
 
 namespace API.Presentation.Controllers;
 
-[Route("api/audit_plan")]
+[Route("api/audit_plans")]
 [ApiController]
 public class AuditPlanController : ControllerBase
 {
@@ -14,15 +14,15 @@ public class AuditPlanController : ControllerBase
     [HttpGet]
     public IActionResult GetAuditPlans()
     {
-        try
-        {
-            var auditPlans = _service.AuditPlanService.GetAllAuditPlans(trackChanges: false);
+        var auditPlans = _service.AuditPlanService.GetAllAuditPlans(trackChanges: false);
 
-            return Ok(auditPlans);
-        }
-        catch
-        {
-            return StatusCode(500, "Internal server error");
-        }
+        return Ok(auditPlans);
+    }
+
+    [HttpGet("{id:guid}")]
+    public IActionResult GetAuditPlan(Guid id)
+    {
+        var auditPlan = _service.AuditPlanService.GetAuditPlan(id, trackChanges: false);
+        return Ok(auditPlan);
     }
 }
