@@ -1,5 +1,4 @@
-using API.Data;
-using API.Services;
+using API.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 
@@ -17,7 +16,12 @@ builder.Services.AddAuthentication(options =>
     options.Audience = builder.Configuration["Auth0:Audience"];
 });
 
-builder.Services.AddControllers();
+builder.Services.ConfigureSqlContext(builder.Configuration);
+builder.Services.ConfigureRepositoryManager();
+builder.Services.ConfigureServiceManager();
+builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddControllers()
+    .AddApplicationPart(typeof(API.Presentation.AssemblyReference).Assembly);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -45,9 +49,6 @@ builder.Services.AddSwaggerGen(c =>
         {securitySchema, new[] {"Bearer"}}
     });
 });
-builder.Services.AddSqlite<DataContext>(builder.Configuration.GetConnectionString("Default"));
-builder.Services.AddScoped<AuditService>();
-builder.Services.AddScoped<PersonService>();
 
 var app = builder.Build();
 
