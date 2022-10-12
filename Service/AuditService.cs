@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Contracts;
 using Entities.Exceptions;
+using Entities.Models;
 using Service.Contracts;
 using Shared.DataTransferObjects;
 
@@ -40,5 +41,19 @@ public class AuditService : IAuditService
 
         var audit = _mapper.Map<AuditDto>(auditDb);
         return audit;
+    }
+
+    public AuditDto CreateAuditForPlan(Guid auditPlanId, AuditForCreationDto auditForCreationDto, bool trackChanges)
+    {
+        var plan = _repository.AuditPlan.GetAuditPlan(auditPlanId, trackChanges);
+        if (plan is null)
+            throw new AuditPlanNotFoundException(auditPlanId);
+
+        var auditEntity = _mapper.Map<Audit>(auditForCreationDto);
+        _repository.Audit.CreateAuditForPlan(auditPlanId, auditEntity);
+        _repository.Save();
+        var auditToReturn = _mapper.Map<AuditDto>(auditEntity);
+        
+        return auditToReturn;
     }
 }

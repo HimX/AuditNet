@@ -9,6 +9,9 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<AuditPlan, AuditPlanDto>();
+        CreateMap<AuditPlanForCreationDto, AuditPlan>();
+
         CreateMap<Audit, AuditDto>();
+        CreateMap<AuditForCreationDto, Audit>();
     }
 }

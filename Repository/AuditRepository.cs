@@ -21,4 +21,10 @@ public class AuditRepository : RepositoryBase<Audit>, IAuditRepository
                 trackChanges)
             .SingleOrDefault();
     }
+
+    public void CreateAuditForPlan(Guid auditPlanId, Audit audit)
+    {
+        audit.AuditPlanId = auditPlanId;
+        Create(audit);
+    }
 }

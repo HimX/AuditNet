@@ -1,5 +1,6 @@
 using API.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,10 +17,13 @@ builder.Services.AddAuthentication(options =>
     options.Audience = builder.Configuration["Auth0:Audience"];
 });
 
-builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureServiceManager();
+builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(Program));
+
+builder.Services.Configure<ApiBehaviorOptions>(options => 
+    options.SuppressModelStateInvalidFilter = true);
 builder.Services.AddControllers(config =>
     {
         config.RespectBrowserAcceptHeader = true;

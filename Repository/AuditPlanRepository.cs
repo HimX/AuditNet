@@ -17,4 +17,10 @@ public class AuditPlanRepository : RepositoryBase<AuditPlan>, IAuditPlanReposito
     public AuditPlan? GetAuditPlan(Guid auditPlanId, bool trackChanges) =>
         FindByCondition(ap => ap.Id.Equals(auditPlanId), trackChanges)
             .SingleOrDefault();
+
+    public void CreateAuditPlan(AuditPlan auditPlan) => Create(auditPlan);
+
+    public IEnumerable<AuditPlan> GetByIds(IEnumerable<Guid> ids, bool trackChanges) =>
+        FindByCondition(ap => ids.Contains(ap.Id), trackChanges)
+            .ToList();
 }

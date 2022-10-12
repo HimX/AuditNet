@@ -6,4 +6,5 @@ public interface IAuditService
 {
     IEnumerable<AuditDto> GetAudits(Guid auditPlanId, bool trackChanges);
     AuditDto GetAudit(Guid auditPlanId, Guid id, bool trackChanges);
+    AuditDto CreateAuditForPlan(Guid auditPlanId, AuditForCreationDto auditForCreationDto, bool trackChanges);
 }
