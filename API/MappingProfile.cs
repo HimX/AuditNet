@@ -10,8 +10,10 @@ public class MappingProfile : Profile
     {
         CreateMap<AuditPlan, AuditPlanDto>();
         CreateMap<AuditPlanForCreationDto, AuditPlan>();
+        CreateMap<AuditPlanForUpdateDto, AuditPlan>();
 
         CreateMap<Audit, AuditDto>();
         CreateMap<AuditForCreationDto, Audit>();
+        CreateMap<AuditForUpdateDto, Audit>().ReverseMap();
     }
 }

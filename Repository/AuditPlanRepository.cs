@@ -23,4 +23,6 @@ public class AuditPlanRepository : RepositoryBase<AuditPlan>, IAuditPlanReposito
     public IEnumerable<AuditPlan> GetByIds(IEnumerable<Guid> ids, bool trackChanges) =>
         FindByCondition(ap => ids.Contains(ap.Id), trackChanges)
             .ToList();
+
+    public void DeleteAuditPlan(AuditPlan auditPlan) => Delete(auditPlan);
 }

@@ -46,6 +46,7 @@ public class AuditService : IAuditService
     public AuditDto CreateAuditForPlan(Guid auditPlanId, AuditForCreationDto auditForCreationDto, bool trackChanges)
     {
         var plan = _repository.AuditPlan.GetAuditPlan(auditPlanId, trackChanges);
+
         if (plan is null)
             throw new AuditPlanNotFoundException(auditPlanId);
 
@@ -53,7 +54,64 @@ public class AuditService : IAuditService
         _repository.Audit.CreateAuditForPlan(auditPlanId, auditEntity);
         _repository.Save();
         var auditToReturn = _mapper.Map<AuditDto>(auditEntity);
-        
+
         return auditToReturn;
+    }
+
+    public void DeleteAuditForPlan(Guid auditPlanId, Guid id, bool trackChanges)
+    {
+        var plan = _repository.AuditPlan.GetAuditPlan(auditPlanId, trackChanges);
+
+        if (plan is null)
+            throw new AuditPlanNotFoundException(auditPlanId);
+
+        var auditForPlan = _repository.Audit.GetAudit(auditPlanId, id, trackChanges);
+
+        if (auditForPlan is null)
+            throw new AuditNotFoundException(id);
+
+        _repository.Audit.DeleteAudit(auditForPlan);
+        _repository.Save();
+    }
+
+    public void UpdateAuditForPlan(Guid auditPlanId, Guid id, AuditForUpdateDto auditForUpdateDto,
+        bool planTrackChanges,
+        bool auditTrackChanges)
+    {
+        var plan = _repository.AuditPlan.GetAuditPlan(auditPlanId, planTrackChanges);
+
+        if (plan is null)
+            throw new AuditPlanNotFoundException(auditPlanId);
+
+        var auditEntity = _repository.Audit.GetAudit(auditPlanId, id, auditTrackChanges);
+
+        if (auditEntity is null)
+            throw new AuditNotFoundException(id);
+
+        _mapper.Map(auditForUpdateDto, auditEntity);
+        _repository.Save();
+    }
+
+    public (AuditForUpdateDto auditToPatch, Audit auditEntity) GetAuditForPatch(Guid auditPlanId, Guid id,
+        bool planTrackChanges,
+        bool auditTrackChanges)
+    {
+        var plan = _repository.AuditPlan.GetAuditPlan(auditPlanId, planTrackChanges);
+        if (plan is null)
+            throw new AuditPlanNotFoundException(auditPlanId);
+
+        var auditEntity = _repository.Audit.GetAudit(auditPlanId, id, auditTrackChanges);
+        if (auditEntity is null)
+            throw new AuditNotFoundException(id);
+
+        var auditToPatch = _mapper.Map<AuditForUpdateDto>(auditEntity);
+
+        return (auditToPatch, auditEntity);
+    }
+
+    public void SaveChangesForPatch(AuditForUpdateDto auditToPatch, Audit auditEntity)
+    {
+        _mapper.Map(auditToPatch, auditEntity);
+        _repository.Save();
     }
 }

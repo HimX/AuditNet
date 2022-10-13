@@ -80,4 +80,26 @@ internal sealed class AuditPlanService : IAuditPlanService
 
         return (plans: planCollectionToReturn, ids: ids);
     }
+
+    public void DeleteAuditPlan(Guid auditPlanId, bool trackChanges)
+    {
+        var plan = _repository.AuditPlan.GetAuditPlan(auditPlanId, trackChanges);
+
+        if (plan is null)
+            throw new AuditPlanNotFoundException(auditPlanId);
+
+        _repository.AuditPlan.DeleteAuditPlan(plan);
+        _repository.Save();
+    }
+
+    public void UpdateAuditPlan(Guid auditPlanId, AuditPlanForUpdateDto auditPlanForUpdate, bool trackChanges)
+    {
+        var plan = _repository.AuditPlan.GetAuditPlan(auditPlanId, trackChanges);
+
+        if (plan is null)
+            throw new AuditPlanNotFoundException(auditPlanId);
+
+        _mapper.Map(auditPlanForUpdate, plan);
+        _repository.Save();
+    }
 }

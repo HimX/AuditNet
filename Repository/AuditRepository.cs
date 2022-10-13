@@ -27,4 +27,6 @@ public class AuditRepository : RepositoryBase<Audit>, IAuditRepository
         audit.AuditPlanId = auditPlanId;
         Create(audit);
     }
+
+    public void DeleteAudit(Audit audit) => Delete(audit);
 }

@@ -8,4 +8,5 @@ public interface IAuditPlanRepository
     AuditPlan? GetAuditPlan(Guid auditPlanId, bool trackChanges);
     void CreateAuditPlan(AuditPlan auditPlan);
     IEnumerable<AuditPlan> GetByIds(IEnumerable<Guid> ids, bool trackChanges);
+    void DeleteAuditPlan(AuditPlan auditPlan);
 }

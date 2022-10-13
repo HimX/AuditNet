@@ -56,4 +56,23 @@ public class AuditPlanController : ControllerBase
 
         return CreatedAtRoute("CompanyCollection", new {result.ids}, result.plans);
     }
+
+    [HttpDelete("{id:guid}")]
+    public IActionResult DeleteAuditPlan(Guid id)
+    {
+        _service.AuditPlanService.DeleteAuditPlan(id, trackChanges: false);
+
+        return NoContent();
+    }
+
+    [HttpPut("{id:guid}")]
+    public IActionResult UpdateAuditPlan(Guid id, [FromBody] AuditPlanForUpdateDto auditPlan)
+    {
+        if (auditPlan is null)
+            return BadRequest("AuditPlanForUpdateDto is null");
+
+        _service.AuditPlanService.UpdateAuditPlan(id, auditPlan, trackChanges: true);
+
+        return NoContent();
+    }
 }
